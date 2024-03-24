@@ -10,18 +10,20 @@ import { Switch, Route } from "react-router-dom";
 function App() {
   return (
     <Switch>
-      <Route path="/login" exact>
-        <div className="container" style={{ padding: 20 }}>
-          <LoginContainer />
-        </div>
-      </Route>
-      <PrivateRoute path="/">
-        <div className="container" style={{ padding: 20 }}>
-          <ProgressTab />
-          <Header />
-          <HabitList />
-        </div>
-      </PrivateRoute>
+      <div className="wrapper">
+        <Route path="/login" exact>
+          <div className="container">
+            <LoginContainer />
+          </div>
+        </Route>
+        <PrivateRoute path="/">
+          <div className="container">
+            <Header />
+            <ProgressTab />
+            <HabitList />
+          </div>
+        </PrivateRoute>
+      </div>
     </Switch>
   );
 }

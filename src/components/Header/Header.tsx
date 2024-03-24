@@ -1,33 +1,45 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import "./Header.css";
-import { Typography, Button } from "antd";
-import PlusOutlined from "@ant-design/icons/PlusOutlined";
-import { HabitModal } from "../HabitModal/HabitModal";
+import { Button, Typography } from "antd";
+import { LogoutOutlined } from "@mui/icons-material";
+import { useAuthContext } from "../../features/auth/AuthContextProvider";
+import { useHistory } from "react-router-dom";
 
 export const Header: FC = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  const currentDay = new Date().getDay();
+  const dayOfWeek = days[currentDay];
 
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setIsModalVisible(false);
+  const { logOut } = useAuthContext();
+  const history = useHistory();
+  const onLogoutClick = () => {
+    logOut();
+    history.push("/login");
   };
 
   return (
     <>
       <div className="Header">
-        <Typography.Title level={3}>My habits</Typography.Title>
-        <Button
-          type="primary"
-          shape="circle"
-          icon={<PlusOutlined />}
-          onClick={showModal}
-        />
+        <div style={{ display: "flex", justifyContent: "end" }}>
+          <Button
+            className="Button"
+            onClick={onLogoutClick}
+            icon={<LogoutOutlined />}
+          />
+        </div>
+        <Typography.Title>
+          Happy <br />
+          {dayOfWeek} 🧘‍♂️
+        </Typography.Title>
       </div>
-
-      <HabitModal closeModal={closeModal} isOpenModal={isModalVisible} />
     </>
   );
 };

@@ -2,3 +2,7 @@
   max-height: 420px;
   overflow: auto;
 }
+
+.Habits__list__header {
+  margin-top: 30px;
+}
