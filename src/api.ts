@@ -14,9 +14,13 @@ import {
 } from "firebase/firestore";
 import { getComplitionIndex } from "./helper";
 import { HabitAPI } from "./types";
+import { User, getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
+
+let currentUser: User | null = null;
 
 export const initializeAPI = () => {
-  initializeApp({
+  const firebaseApp = initializeApp({
     apiKey: "AIzaSyB-44Rf6Q1KQGU3XEJJ1pgO9_z8EgcOMtA",
     authDomain: "habits-tracker-13e9b.firebaseapp.com",
     projectId: "habits-tracker-13e9b",
@@ -25,14 +29,27 @@ export const initializeAPI = () => {
     appId: "1:828922072297:web:a84271b12c99044ea5b478",
   });
 
-  getFirestore();
+  const auth = getAuth(firebaseApp);
+  auth.onAuthStateChanged((user) => {
+    currentUser = user;
+  });
+
+  getFirestore(firebaseApp);
+  getStorage(firebaseApp);
+
+  return firebaseApp;
 };
 
 export const apiGetHabit = async (id: string): Promise<HabitAPI | null> => {
+  if (!currentUser) {
+    throw new Error("User not authenticated");
+  }
+
   const db = getFirestore();
+  const habitCollection = currentUser.uid;
 
   try {
-    const querySnapshot = await getDoc(doc(db, "habits", id));
+    const querySnapshot = await getDoc(doc(db, habitCollection, id));
 
     if (querySnapshot.exists()) {
       const data = querySnapshot.data() as Omit<HabitAPI, "id">;
@@ -50,10 +67,18 @@ export const apiGetHabit = async (id: string): Promise<HabitAPI | null> => {
 };
 
 export const apiGetHabits = async (): Promise<HabitAPI[]> => {
+  if (!currentUser) {
+    throw new Error("User not authenticated");
+  }
+
   const result: HabitAPI[] = [];
   const db = getFirestore();
+  const habitCollection = currentUser.uid;
   try {
-    const q = query(collection(db, "habits"), orderBy("createdAt", "desc"));
+    const q = query(
+      collection(db, habitCollection),
+      orderBy("createdAt", "desc")
+    );
     const querySnapshot = await getDocs(q);
 
     querySnapshot.forEach((doc) => {
@@ -76,15 +101,20 @@ export interface HabitSaveData {
 export const apiSaveNewHabit = async (
   data: HabitSaveData
 ): Promise<HabitAPI | null> => {
+  if (!currentUser) {
+    throw new Error("User not authenticated");
+  }
+
   const newDoc: Omit<HabitAPI, "id"> = {
     ...data,
     createdAt: Timestamp.now(),
     completionHistory: [],
   };
   const db = getFirestore();
+  const habitCollection = currentUser.uid;
 
   try {
-    const docRef = await addDoc(collection(db, "habits"), newDoc);
+    const docRef = await addDoc(collection(db, habitCollection), newDoc);
     const doc = await apiGetHabit(docRef.id);
 
     if (doc !== null) {
@@ -99,10 +129,15 @@ export const apiUpdateHabit = async (
   id: string,
   data: Partial<HabitSaveData>
 ): Promise<HabitAPI | null> => {
+  if (!currentUser) {
+    throw new Error("User not authenticated");
+  }
+
   const db = getFirestore();
+  const habitCollection = currentUser.uid;
 
   try {
-    await updateDoc(doc(db, "habits", id), {
+    await updateDoc(doc(db, habitCollection, id), {
       ...data,
     });
     const updatedDoc = await apiGetHabit(id);
@@ -115,10 +150,15 @@ export const apiUpdateHabit = async (
 };
 
 export const apiDeleteHabit = async (id: string): Promise<void> => {
+  if (!currentUser) {
+    throw new Error("User not authenticated");
+  }
+
   const db = getFirestore();
+  const habitCollection = currentUser.uid;
 
   try {
-    await deleteDoc(doc(db, "habits", id));
+    await deleteDoc(doc(db, habitCollection, id));
   } catch (error) {}
 };
 
@@ -126,7 +166,12 @@ export const apiUpdateHabitCompletion = async (
   id: string,
   checked: boolean
 ): Promise<HabitAPI | null> => {
+  if (!currentUser) {
+    throw new Error("User not authenticated");
+  }
+
   const db = getFirestore();
+  const habitCollection = currentUser.uid;
 
   try {
     const habit = await apiGetHabit(id);
@@ -139,7 +184,7 @@ export const apiUpdateHabitCompletion = async (
     if (checked) {
       if (completionIndex === -1) {
         (habit.completionHistory as Timestamp[]).push(Timestamp.now());
-        await updateDoc(doc(db, "habits", id), {
+        await updateDoc(doc(db, habitCollection, id), {
           completionHistory: habit.completionHistory,
         });
         return await apiGetHabit(id);
@@ -147,7 +192,7 @@ export const apiUpdateHabitCompletion = async (
     } else {
       if (completionIndex !== -1) {
         habit.completionHistory.splice(completionIndex, 1);
-        await updateDoc(doc(db, "habits", id), {
+        await updateDoc(doc(db, habitCollection, id), {
           completionHistory: habit.completionHistory,
         });
         return await apiGetHabit(id);

@@ -67,7 +67,6 @@ export const HabitModal: FC<Props> = ({
       <Form form={form} layout="vertical" onFinish={onValid} autoComplete="off">
         <Form.Item
           name="name"
-          label="Habit"
           initialValue={habit?.name}
           rules={[{ required: true }]}
         >

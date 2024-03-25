@@ -1,5 +1,10 @@
 .Header {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
+  flex-direction: column;
+  margin-bottom: 30px;
+}
+
+.Button {
+  outline: none;
+  border: none;
 }

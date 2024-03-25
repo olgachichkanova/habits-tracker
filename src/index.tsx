@@ -6,8 +6,10 @@ import reportWebVitals from "./reportWebVitals";
 import { initializeAPI } from "./api";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
+import { AuthContextProvider } from "./features/auth/AuthContextProvider";
+import { BrowserRouter as Router } from "react-router-dom";
 
-initializeAPI();
+const firebaseApp = initializeAPI();
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -15,7 +17,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <AuthContextProvider firebaseApp={firebaseApp}>
+        <Router>
+          <App />
+        </Router>
+      </AuthContextProvider>
     </Provider>
   </React.StrictMode>
 );
