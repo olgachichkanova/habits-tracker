@@ -1,4 +1,7 @@
-import { FloatButton, List, Spin, Typography } from "antd";
+import FloatButton from "antd/lib/float-button";
+import List from "antd/lib/list";
+import Spin from "antd/lib/spin";
+import Typography from "antd/lib/typography";
 import { useEffect, useState } from "react";
 import { HabitCard } from "../HabitCard/HabitCard";
 import { Dispatch } from "../../store/store";

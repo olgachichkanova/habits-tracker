@@ -1,4 +1,6 @@
-import { Row, Col, Progress } from "antd";
+import Row from "antd/lib/row";
+import Col from "antd/lib/col";
+import Progress from "antd/lib/progress";
 import { getProgressData, getWeekDays, IDate } from "../../helper";
 import { IProgressData } from "../../types";
 import { useSelector } from "react-redux";

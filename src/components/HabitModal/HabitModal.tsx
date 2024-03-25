@@ -1,5 +1,7 @@
 import React, { FC } from "react";
-import { Modal, Form, Input } from "antd";
+import Modal from "antd/lib/modal";
+import Form from "antd/lib/form";
+import Input from "antd/lib/input";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "../../store/store";
 import { addHabitApi, updateHabitApi } from "../../store/actions";
