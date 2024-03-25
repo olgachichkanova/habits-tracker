@@ -2,6 +2,8 @@
 
 Habit Tracker is a web application that helps you develop and maintain healthy habits. It allows you to create, track, and monitor your daily habits, providing a visual representation of your progress over time.
 
+Try it here: http://tracker.olyaandre.com/
+
 ## Featuers
 
 - User Authentication: Sign in with your Google or GitHub account for a seamless experience.
