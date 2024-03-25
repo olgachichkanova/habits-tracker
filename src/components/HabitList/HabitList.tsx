@@ -1,4 +1,4 @@
-import { FloatButton, List, Typography } from "antd";
+import { FloatButton, List, Spin, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { HabitCard } from "../HabitCard/HabitCard";
 import { Dispatch } from "../../store/store";
@@ -29,24 +29,27 @@ export const HabitList = () => {
     dispatch(fetchHabits()).then(() => {
       setLoading(false);
     });
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     const completed = getTodayCompletion(habits);
     dispatch(setCompletedHabits(completed));
-  }, [habits]);
+  }, [habits, dispatch]);
 
   return (
     <div className="Habits__list">
       <div className="Habits__list__header">
         <Typography.Title level={3}>My habits</Typography.Title>
       </div>
-      <List
-        size="small"
-        itemLayout="horizontal"
-        dataSource={habits}
-        renderItem={(habit) => <HabitCard key={habit.id} habit={habit} />}
-      />
+      {loading && <Spin />}
+      {!loading && (
+        <List
+          size="small"
+          itemLayout="horizontal"
+          dataSource={habits}
+          renderItem={(habit) => <HabitCard key={habit.id} habit={habit} />}
+        />
+      )}
       <div style={{ width: "100%", display: "flex" }}>
         <FloatButton
           style={{ margin: "0 auto" }}

@@ -1,7 +1,14 @@
-import React, { FC, createContext, useContext, useEffect, useState } from 'react';
-import { TAuthContext } from './types';
-import { FirebaseApp } from 'firebase/app';
-import { getFirestore, getDoc, doc } from 'firebase/firestore';
+import React, {
+  FC,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { TAuthContext } from "./types";
+import { FirebaseApp } from "firebase/app";
+import { getFirestore, getDoc, doc } from "firebase/firestore";
 import {
   getAuth,
   User,
@@ -12,7 +19,7 @@ import {
   ProviderId,
   GoogleAuthProvider,
   GithubAuthProvider,
-} from 'firebase/auth';
+} from "firebase/auth";
 
 type TProps = {
   firebaseApp: FirebaseApp;
@@ -36,10 +43,11 @@ export const useAuthContext = (): TAuthContext => {
 };
 const isUserAdmin = async (firebaseApp: FirebaseApp) => {
   const db = getFirestore(firebaseApp);
-  return await getDoc(doc(db, '/internal/auth'));
+  return await getDoc(doc(db, "/internal/auth"));
 };
 export const AuthContextProvider: FC<TProps> = ({ firebaseApp, children }) => {
-  const [isAuthenticated, setIsAuthenticaded] = useState<TAuthContext['isAuthenticated']>(null);
+  const [isAuthenticated, setIsAuthenticaded] =
+    useState<TAuthContext["isAuthenticated"]>(null);
   const [user, setUser] = useState<User | null>(null);
   const [auth] = useState(getAuth(firebaseApp));
   const loginWithEmailAndPassword = (email: string, password: string) => {
@@ -64,7 +72,7 @@ export const AuthContextProvider: FC<TProps> = ({ firebaseApp, children }) => {
         throw err;
       });
   };
-  const logOut = () => signOut(auth);
+  const logOut = useCallback(() => signOut(auth), [auth]);
   useEffect(() => {
     auth.setPersistence(browserLocalPersistence);
 
@@ -85,7 +93,7 @@ export const AuthContextProvider: FC<TProps> = ({ firebaseApp, children }) => {
         setUser(null);
       }
     });
-  }, [auth]);
+  }, [auth, firebaseApp, logOut]);
   return (
     <authContext.Provider
       value={{

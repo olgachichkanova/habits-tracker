@@ -64,7 +64,7 @@ export const HabitCard: FC<Props> = ({ habit }) => {
     }
     const streak = getHabitStreak(habit);
     setDescription(getStreakDescription(streak));
-  }, [checkedHabits]);
+  }, [checkedHabits, habit]);
 
   const menu = (
     <Menu>
