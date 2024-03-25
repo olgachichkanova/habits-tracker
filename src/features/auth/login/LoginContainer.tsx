@@ -81,7 +81,7 @@ export const LoginContainer: FC = () => {
   ) => {
     return loginPromise
       .then(() => {
-        history.push(locationState?.from || "/admin");
+        history.push(locationState?.from || "/");
       })
       .catch((error) => {
         setAuthError(error?.message || "error");
