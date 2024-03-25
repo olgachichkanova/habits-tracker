@@ -1,7 +1,8 @@
-import { Box, Stack } from '@mui/material';
-import React, { FC } from 'react';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import React, { FC } from "react";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 export type TLoginField = {
   name: string;
@@ -18,7 +19,12 @@ type TProps = {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 };
 
-export const LoginForm: FC<TProps> = ({ className, email, password, onSubmit }) => {
+export const LoginForm: FC<TProps> = ({
+  className,
+  email,
+  password,
+  onSubmit,
+}) => {
   return (
     <Box className={className}>
       <form onSubmit={onSubmit} method="POST">
@@ -44,7 +50,12 @@ export const LoginForm: FC<TProps> = ({ className, email, password, onSubmit }) 
             error={!!password.error}
             helperText={password.helper}
           />
-          <Button type="submit" variant="contained" color="primary" size="large">
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            size="large"
+          >
             Войти
           </Button>
         </Stack>

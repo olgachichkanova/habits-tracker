@@ -1,7 +1,8 @@
 import React, { FC } from "react";
 import "./Header.css";
-import { Button, Typography } from "antd";
-import { LogoutOutlined } from "@mui/icons-material";
+import Button from "antd/lib/button";
+import Typography from "antd/lib/typography";
+import LogoutOutlined from "@mui/icons-material/LogoutOutlined";
 import { useAuthContext } from "../../features/auth/AuthContextProvider";
 import { useHistory } from "react-router-dom";
 

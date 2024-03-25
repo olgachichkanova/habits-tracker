@@ -1,9 +1,12 @@
-import { List, Checkbox, Menu, Dropdown, Button, Modal } from "antd";
-import {
-  EditOutlined,
-  DeleteOutlined,
-  EllipsisOutlined,
-} from "@ant-design/icons";
+import List from "antd/lib/list";
+import Checkbox from "antd/lib/checkbox";
+import Menu from "antd/lib/menu";
+import Dropdown from "antd/lib/dropdown";
+import Button from "antd/lib/button";
+import Modal from "antd/lib/modal";
+import EditOutlined from "@ant-design/icons/EditOutlined";
+import DeleteOutlined from "@ant-design/icons/DeleteOutlined";
+import EllipsisOutlined from "@ant-design/icons/EllipsisOutlined";
 import ExclamationCircleOutlined from "@ant-design/icons/ExclamationCircleOutlined";
 import { FC, useEffect, useState } from "react";
 import "./HabitCard.css";
