@@ -8,6 +8,12 @@ export const convertTimestampToDate = (timestamp: Timestamp) => {
       ).toISOString()
     : "";
 };
+
+const convertCompletionHistoryToDate = (items: Timestamp[]) => {
+  return items.map((entry) => {
+    return convertTimestampToDate(entry);
+  });
+};
 export const convertHabitTimestamps = (habit: HabitAPI) => {
   if (habit.createdAt instanceof Timestamp) {
     habit.createdAt = convertTimestampToDate(habit.createdAt);
@@ -37,13 +43,61 @@ export const isTodayHabitComplete = (habit: HabitAPI) => {
     .includes(today);
 };
 
-export const getProgressData = (): IProgressData => {
+export const getProgressData = (habits: HabitAPI[]): IProgressData => {
   const weekDays = getWeekDays();
   const data: IProgressData = {};
+  // get completed (item which complition history has this day)
   weekDays.forEach((day) => {
-    data[day.name] = { completed: 5, total: 5 };
+    const total = getTotal(day.date, habits);
+    const completed = getCompleted(day.date, habits);
+    data[day.name] = { completed: completed, total: total };
   });
+  console.log(data);
   return data;
+};
+
+const getCompleted = (date: Date, items: HabitAPI[]): number => {
+  let completed = 0;
+
+  items.forEach((item) => {
+    const history = convertCompletionHistoryToDate(
+      item.completionHistory as Timestamp[]
+    );
+    const completedOnDate = history.some(
+      (completionDate) =>
+        stripDate(new Date(completionDate)).getTime() ===
+        stripDate(date).getTime()
+    );
+
+    if (completedOnDate) {
+      completed++;
+    }
+  });
+
+  return completed;
+};
+
+const getTotal = (date: Date, items: HabitAPI[]): number => {
+  let total = 0;
+
+  items.forEach((item) => {
+    const habitCreationDate = new Date(
+      convertTimestampToDate(item.createdAt as Timestamp)
+    );
+
+    if (stripDate(habitCreationDate) <= stripDate(date)) {
+      total++;
+    }
+  });
+
+  return total;
+};
+
+const stripDate = (date: Date): Date => {
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const day = date.getDate();
+  return new Date(year, month, day);
 };
 
 export const getComplitionIndex = (habit: HabitAPI) => {
