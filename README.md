@@ -31,3 +31,7 @@ To run the Habit Tracker application locally, follow these steps:
 To enter login to test profile:
 login: user@test.com
 password: 123456789
+
+### Features to be done
+- Update progress data instantly
+- Update streak data instantly
