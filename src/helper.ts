@@ -52,7 +52,6 @@ export const getProgressData = (habits: HabitAPI[]): IProgressData => {
     const completed = getCompleted(day.date, habits);
     data[day.name] = { completed: completed, total: total };
   });
-  console.log(data);
   return data;
 };
 
