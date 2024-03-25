@@ -1,12 +1,14 @@
-import React from "react";
 import { Row, Col, Progress } from "antd";
 import { getProgressData, getWeekDays, IDate } from "../../helper";
 import { IProgressData } from "../../types";
+import { useSelector } from "react-redux";
+import { getHabits } from "../../store/selectors";
 
 export const ProgressTab = () => {
   const daysOfWeek: IDate[] = getWeekDays();
+  const habits = useSelector(getHabits);
 
-  const progressData: IProgressData = getProgressData();
+  const progressData: IProgressData = getProgressData(habits);
 
   return (
     <Row justify="space-around" align="middle">

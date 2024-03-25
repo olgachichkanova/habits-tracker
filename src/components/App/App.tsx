@@ -19,7 +19,9 @@ function App() {
         <PrivateRoute path="/">
           <div className="container">
             <Header />
-            <ProgressTab />
+            <div className="Progress">
+              <ProgressTab />
+            </div>
             <HabitList />
           </div>
         </PrivateRoute>
